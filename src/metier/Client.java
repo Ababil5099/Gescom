@@ -8,6 +8,7 @@ public class Client {
     private String raisonSociale;
     private double caClient;
     private List<Commande> commandes;
+    private List<Commande> listeCommandes;
 
     public Client(int idClient, String raisonSociale) {
         this.idClient = idClient;
@@ -55,4 +56,8 @@ public class Client {
         commandes.remove(commande);
         caClient -= commande.valoriserCommande();
     }
+    public List<Commande> getCommandes() {
+        return this.listeCommandes; // Retourne la liste des commandes du client
+    }
+
 }

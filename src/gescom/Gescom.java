@@ -1,9 +1,12 @@
 package gescom;
 
-import metier.*;
-import dao.*;
+import dao.BdD;
+import metier.Article;
+import metier.Client;
+import metier.Commande;
+import metier.Representant;
+
 import java.util.Scanner;
-import utilitaires.*;
 
 public class Gescom {
 
@@ -13,7 +16,7 @@ public class Gescom {
         /* Instanciation de l'objet de type BdD */
         bdd = new BdD();
         /* Déclaration et instanciation d'un objet de type Representant */
-        Representant unRepresentant = new Representant(100, "Paul", "Auchon", bdd.getClientsBdD());
+        Representant unRepresentant = new Representant(100, "Paul", "Auchon");
         int choix = menu();
         while (choix != 0) {
             switch (choix) {
@@ -74,8 +77,18 @@ public class Gescom {
      * @param unRepresentant 
      */
     private static void afficherCaClient(Representant unRepresentant) {
-        /* A compléter */
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Saisir l'id du client : ");
+        int idClient = sc.nextInt();
+
+        Client client = unRepresentant.getClientById(idClient);
+        if (client != null) {
+            System.out.println("CA du client " + client.getRaisonSociale() + " : " + client.getCaClient());
+        } else {
+            System.out.println("Client inexistant.");
+        }
     }
+
 
     /**
      * Saisie de l'id du client à recherché, si trouvé
@@ -85,8 +98,21 @@ public class Gescom {
      * @param unRepresentant 
      */
     private static void afficherCommandesClient(Representant unRepresentant) {
-        /* A compléter */
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Saisir l'id du client : ");
+        int idClient = sc.nextInt();
+
+        Client client = unRepresentant.getClientById(idClient);
+        if (client != null) {
+            System.out.println("Commandes du client " + client.getRaisonSociale() + " :");
+            for (Commande commande : client.getCommandes()) {
+                afficherCommande(commande);
+            }
+        } else {
+            System.out.println("Client inexistant.");
+        }
     }
+
 
     /**
      * Parcours de la liste des clients et pour chaque client
@@ -96,8 +122,9 @@ public class Gescom {
      * @param unRepresentant 
      */
     private static void listerClients(Representant unRepresentant) {
-        /* A compléter */
+
     }
+
 
     /**
      * Saisie du numéro de la commande à suprimer,
@@ -107,8 +134,21 @@ public class Gescom {
      * @param unRepresentant 
      */
     private static void supprimerCommande(Representant unRepresentant) {
-        /* A compléter */
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Saisir l'id de la commande à supprimer : ");
+        int idCommande = sc.nextInt();
+
+        for (Client client : unRepresentant.getListeClients()) {
+            Commande commande = client.getCommandeById(idCommande);
+            if (commande != null) {
+                client.supprimerCommande(commande);
+                System.out.println("Commande supprimée.");
+                return;
+            }
+        }
+        System.out.println("Commande introuvable.");
     }
+
 
     /**
      * Affiche la liste des articles commandés sans doublons.
